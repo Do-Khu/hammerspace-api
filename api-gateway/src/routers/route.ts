@@ -1,6 +1,6 @@
 import express from 'express'
-import login from '../handler/login'
-import refresh from '../handler/refresh'
+import login from '../handlers/login'
+import refresh from '../handlers/refresh'
 
 const router = express.Router()
 

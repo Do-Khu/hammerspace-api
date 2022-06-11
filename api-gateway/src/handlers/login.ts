@@ -1,9 +1,10 @@
 import { Response, Request } from 'express'
-import LoginInfo from "../model/login"
-import Token from '../model/token';
+import LoginInfo from "../models/login"
+import Token from '../models/token';
 import { generateToken } from '../utils/auth.utils';
+import { validatePassword } from '../utils/repositories/userRepository'
 
-const login = (req : Request, res : Response) =>{
+const login = async (req : Request, res : Response) =>{
     const loginInfo : LoginInfo = req.body
 
     if(!loginInfo.username || !loginInfo.password){
@@ -12,8 +13,13 @@ const login = (req : Request, res : Response) =>{
         return res.status(400).send()
     }
 
-    // TODO: Comparar informações do usuário com o banco de dados
-    
+    // Comparar informações do usuário com o banco de dados
+    const isLoginOk = await validatePassword(loginInfo.username, loginInfo.password)
+    if (!isLoginOk){
+        console.log("Usuário ou senha inválidos")
+        return res.status(401).send()
+    }
+
     let token = generateToken(loginInfo.username)
     if(token instanceof Error){
         // TODO: logar erro em arquivo
