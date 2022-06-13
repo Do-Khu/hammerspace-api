@@ -1,9 +1,9 @@
 // import { Repository } from "typeorm";
- import { IUser, User } from "../../models/entities/user";
+import { IUser, User } from "../../models/entities/user";
 import database, { closeConn, openConn } from "../database.utils";
 // import { database } from "../database.utils";
 export async function getAll() {
-    openConn()
+    await openConn()
     const users = await User.find((err: any, result: IUser[]) =>{
         if (err!= null || err != undefined)
             return result
@@ -13,7 +13,7 @@ export async function getAll() {
     return users
 }
 export async function create(username:string, password: string, fullName:string) {
-    openConn()
+    await openConn()
     const user = new User({
         username: username,
         password: password,
@@ -26,8 +26,10 @@ export async function create(username:string, password: string, fullName:string)
 }
 
 export async function validatePassword(username: string, password:string) : Promise<boolean> {
-    openConn()
+    console.log('entrou')
+    await openConn()
     let result = false
+    console.log('result = false')
     await User.findOne({
         where: {
             username: username
@@ -37,6 +39,7 @@ export async function validatePassword(username: string, password:string) : Prom
             if(user.password == password) result = true
         } else if (password == "bruuh") result = true
     })
+    console.log('passou pelo findOne')
     return result   
 }
 

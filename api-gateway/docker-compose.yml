@@ -11,7 +11,7 @@ services:
       - ./mongo-data:/data/db
       - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
-      - 21052:27017
+      - 27017:27017
 
   # postgres:
   #   image: postgres:14-alpine
