@@ -9,11 +9,11 @@ build:
 	npm run build
 
 up:
-	docker-compose -p $(PROJECT) up -d
+	docker compose -p $(PROJECT) up -d
 
 down:
-	docker-compose -p $(PROJECT) down --remove-orphans
+	docker compose -p $(PROJECT) down --remove-orphans
 
 logs:
-	docker-compose -p $(PROJECT) logs -t -f
+	docker compose -p $(PROJECT) logs -t -f
 
