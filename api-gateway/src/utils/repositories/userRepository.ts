@@ -1,9 +1,9 @@
 // import { Repository } from "typeorm";
- import { IUser, User } from "../../models/entities/user";
+import { IUser, User } from "../../models/entities/user";
 import database, { closeConn, openConn } from "../database.utils";
 // import { database } from "../database.utils";
 export async function getAll() {
-    openConn()
+    await openConn()
     const users = await User.find((err: any, result: IUser[]) =>{
         if (err!= null || err != undefined)
             return result
@@ -13,7 +13,7 @@ export async function getAll() {
     return users
 }
 export async function create(username:string, password: string, fullName:string) {
-    openConn()
+    await openConn()
     const user = new User({
         username: username,
         password: password,
@@ -22,21 +22,21 @@ export async function create(username:string, password: string, fullName:string)
         isDeleted: false
     })
     await user.save()
-    closeConn()
+    await closeConn()
 }
 
 export async function validatePassword(username: string, password:string) : Promise<boolean> {
-    openConn()
+  
+    await openConn()
     let result = false
-    await User.findOne({
-        where: {
-            username: username
-        }
-    }).then(function (user){
-        if (user) {
-            if(user.password == password) result = true
-        } else if (password == "bruuh") result = true
-    })
+    const user = await User.findOne({
+        username: username
+    }).catch((err)=>{
+        console.log("erro ao tentar validar login: "+ err)
+    });
+    if (user) {
+        if(user.password == password) result = true
+    } else if (password == "bruuh") result = true
     return result   
 }
 

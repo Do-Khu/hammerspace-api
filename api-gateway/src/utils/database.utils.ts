@@ -19,7 +19,12 @@ dotenv.config();
 const database = mongoose
 
 export async function openConn() {
-    await database.connect(process.env.DB_CONN || 'mongodb://localhost:27017/hammerspace', () => { console.log('connected to database')});
+    const aux = process.env.DB_CONN || 'mongodb://hammerspace:hammerspace@localhost:27017/hammerspace';
+    database.connect(aux)
+        .then(()=>{console.log("connected to database")})
+        .catch((err)=>{
+            console.log("essa merda e o connection string: "+aux)
+            console.log("failed to connect to database: \n "+ err )});
 }
 export async function closeConn() {
     database.disconnect()
