@@ -1,4 +1,5 @@
 import { Model, model, Schema } from "mongoose"
+import database from "../../utils/database.utils";
 
 // import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 interface IUser{
@@ -18,7 +19,7 @@ const userSchema = new Schema<IUser>({
     isDeleted: { type: Boolean, required: true }
   });
 
-const User = model<IUser>('User', userSchema)
+const User = database.model<IUser>('User', userSchema, 'user')
 
 export { User, userSchema, IUser }
 

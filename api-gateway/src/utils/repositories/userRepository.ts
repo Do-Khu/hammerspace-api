@@ -22,24 +22,21 @@ export async function create(username:string, password: string, fullName:string)
         isDeleted: false
     })
     await user.save()
-    closeConn()
+    await closeConn()
 }
 
 export async function validatePassword(username: string, password:string) : Promise<boolean> {
-    console.log('entrou')
+  
     await openConn()
     let result = false
-    console.log('result = false')
-    await User.findOne({
-        where: {
-            username: username
-        }
-    }).then(function (user){
-        if (user) {
-            if(user.password == password) result = true
-        } else if (password == "bruuh") result = true
-    })
-    console.log('passou pelo findOne')
+    const user = await User.findOne({
+        username: username
+    }).catch((err)=>{
+        console.log("erro ao tentar validar login: "+ err)
+    });
+    if (user) {
+        if(user.password == password) result = true
+    } else if (password == "bruuh") result = true
     return result   
 }
 
