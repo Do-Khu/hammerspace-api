@@ -1,7 +1,5 @@
-// import { Repository } from "typeorm";
-import { IUser, User } from "../../models/entities/user";
-import database, { closeConn, openConn } from "../database.utils";
-// import { database } from "../database.utils";
+import { IUser, User } from "../../models/entities/user.model";
+import { closeConn, openConn } from "../database.utils";
 export async function getAll() {
     await openConn()
     const users = await User.find((err: any, result: IUser[]) =>{
@@ -12,7 +10,8 @@ export async function getAll() {
     closeConn()
     return users
 }
-export async function create(username:string, password: string, fullName:string) {
+
+export async function create(username:string, password: string, fullName:string): Promise<Error | null> {
     await openConn()
     const user = new User({
         username: username,
@@ -21,62 +20,33 @@ export async function create(username:string, password: string, fullName:string)
         isActive: true,
         isDeleted: false
     })
-    await user.save()
+    await user.save().catch((err) => {
+        console.log("Db error on user creation: " + err.message)
+        console.log(err.stack)
+        return err
+    })
     await closeConn()
+    return null
 }
 
-export async function validatePassword(username: string, password:string) : Promise<boolean> {
+export async function validatePassword(username: string, password:string) : Promise<boolean | Error> {
   
     await openConn()
+    
     let result = false
+
     const user = await User.findOne({
         username: username
     }).catch((err)=>{
-        console.log("erro ao tentar validar login: "+ err)
-    });
+        console.log("error on login validation: " + err)
+        return err
+    })
+
     if (user) {
         if(user.password == password) result = true
-    } else if (password == "bruuh") result = true
+    }
+
+    await closeConn()
+
     return result   
 }
-
-// let userRepository: Repository<User>
-
-// function init(){
-//     database.initialize()
-//     .then(()=>{
-//         userRepository = database.getRepository(User)
-//     }).catch((error) => {console.log(error)})
-// }
-
-// export async function getAll() : Promise<User[]> {
-//     init()
-//     const users = await userRepository.find().catch((error) => {console.log(error)})
-//     .finally(()=>{database.destroy()})
-//     return users || [];
-// }
-
-// export async function create(user:User) {
-//     init()
-//     await userRepository.create(user)
-//     database.destroy()
-// }
-
-// export async function validatePassword(username:string, password:string) : Promise<boolean> {
-//     init()
-//     const user = await userRepository.find({
-//         where:{
-//             username: username,
-//             password: password
-//         }
-//     }).catch((error) => {console.log(error)})
-//     .finally(()=>{database.destroy()})
-
-//     if (user?.length != 0) {
-//         return true
-//     } else { 
-//         return false
-//     }
-// }
-
-// export default init()

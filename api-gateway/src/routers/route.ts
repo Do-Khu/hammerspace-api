@@ -1,8 +1,11 @@
 import express from 'express'
 import login from '../handlers/login'
 import refresh from '../handlers/refresh'
+import register from '../handlers/register'
 
 const router = express.Router()
+
+router.post('/register', register)
 
 router.post('/auth', login)
 router.get('/refresh', refresh)

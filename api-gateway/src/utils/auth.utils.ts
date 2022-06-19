@@ -1,6 +1,7 @@
-import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken'
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import moment from 'moment';
+import * as crypto from 'crypto';
 
 dotenv.config()
 
@@ -12,12 +13,11 @@ export function generateToken(username : string) : string | Error{
     // Validar se as configurações de token existem
     if(tokenSecretKey == "" || tokenDuration == ""){
         // TODO: logar, em arquivo, que precisa validar config de token
-        console.log("Ur token config is strange, check it again")
-        return new Error("Ur token config is strange, check it again")
+        console.log("Couldnt fing your token configuration is strange, please check it and try again")
+        return new Error("Couldnt fing your token configuration is strange, please check it and try again")
     }
 
     try {
-        // TODO: validar usuário e senha do usuário com a base de dados
         let payload : jwt.JwtPayload = {
             iss : 'datakhu.net',
             sub : username,
@@ -39,8 +39,8 @@ export function verifyToken(token : string) : boolean | Error{
     // Validar se as configurações de token existem
     if(tokenSecretKey == ""){
         // TODO: logar, em arquivo, que precisa validar config de token
-        console.log("Ur token config is strange, check it again")
-        return new Error("Ur token config is strange, check it again")
+        console.log("Couldnt fing your token configuration is strange, please check it and try again")
+        return new Error("Couldnt fing your token configuration is strange, please check it and try again")
     }
 
     try {
@@ -57,4 +57,13 @@ export function verifyToken(token : string) : boolean | Error{
         }
         return error as Error
     }
+}
+
+export function isSHA256(text:string): boolean {
+    const regexExp = /^[a-f0-9]{64}$/gi
+    return regexExp.test(text)
+}
+
+export function toSHA256(text:string): string{
+    return crypto.createHash('sha256').update(text).digest('hex')
 }

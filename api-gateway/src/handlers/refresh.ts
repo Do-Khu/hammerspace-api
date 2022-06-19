@@ -1,32 +1,31 @@
 import { Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
-import moment from 'moment'
-import Token from '../models/token'
+import Token from '../models/token.dto'
 import { generateToken, verifyToken } from '../utils/auth.utils'
 
 const refresh = (req : Request, res: Response) => {
+    console.log("GET api/refresh")
     let token : string | Error | undefined = req.headers.authorization
 
     if(!token){
         return res.status(401).end()
     }
-    console.log("token recebido: " + token)
+
     const payload = jwt.decode(token.replace("Bearer ", '') as string) as jwt.JwtPayload
-    console.log("payload sub: " + payload.sub)
-    console.log("payload exp: " + moment(payload.exp).toLocaleString())
 
     if(!payload){
-        console.log("veio vazio")
+        console.log("received empty payload")
+        return res.status(400).end()
     }
 
     const isTokenValid = verifyToken(token.replace("Bearer ", '') as string)
     if(isTokenValid instanceof Error){
         console.log(isTokenValid.message)
         console.log(isTokenValid.stack)
-        res.status(500).end()
+        return res.status(500).end()
     }
     if(!isTokenValid){
-        res.status(401).end()
+        return res.status(401).end()
     }
 
     if(!payload.sub)
