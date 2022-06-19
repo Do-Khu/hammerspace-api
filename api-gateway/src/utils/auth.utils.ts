@@ -1,4 +1,4 @@
-import jwt, { JsonWebTokenError, JwtPayload, TokenExpiredError } from 'jsonwebtoken'
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import moment from 'moment';
 
@@ -17,7 +17,6 @@ export function generateToken(username : string) : string | Error{
     }
 
     try {
-        // TODO: validar usuário e senha do usuário com a base de dados
         let payload : jwt.JwtPayload = {
             iss : 'datakhu.net',
             sub : username,
