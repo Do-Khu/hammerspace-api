@@ -1,6 +1,5 @@
 import { Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
-import moment from 'moment'
 import Token from '../models/token.dto'
 import { generateToken, verifyToken } from '../utils/auth.utils'
 
@@ -15,17 +14,17 @@ const refresh = (req : Request, res: Response) => {
 
     if(!payload){
         console.log("received empty payload")
-        res.status(400).end()
+        return res.status(400).end()
     }
 
     const isTokenValid = verifyToken(token.replace("Bearer ", '') as string)
     if(isTokenValid instanceof Error){
         console.log(isTokenValid.message)
         console.log(isTokenValid.stack)
-        res.status(500).end()
+        return res.status(500).end()
     }
     if(!isTokenValid){
-        res.status(401).end()
+        return res.status(401).end()
     }
 
     if(!payload.sub)

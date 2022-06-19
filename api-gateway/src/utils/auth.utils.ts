@@ -13,8 +13,8 @@ export function generateToken(username : string) : string | Error{
     // Validar se as configurações de token existem
     if(tokenSecretKey == "" || tokenDuration == ""){
         // TODO: logar, em arquivo, que precisa validar config de token
-        console.log("Ur token config is strange, check it again")
-        return new Error("Ur token config is strange, check it again")
+        console.log("Couldnt fing your token configuration is strange, please check it and try again")
+        return new Error("Couldnt fing your token configuration is strange, please check it and try again")
     }
 
     try {
@@ -39,8 +39,8 @@ export function verifyToken(token : string) : boolean | Error{
     // Validar se as configurações de token existem
     if(tokenSecretKey == ""){
         // TODO: logar, em arquivo, que precisa validar config de token
-        console.log("Ur token config is strange, check it again")
-        return new Error("Ur token config is strange, check it again")
+        console.log("Couldnt fing your token configuration is strange, please check it and try again")
+        return new Error("Couldnt fing your token configuration is strange, please check it and try again")
     }
 
     try {
