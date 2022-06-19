@@ -1,6 +1,7 @@
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 import dotenv from 'dotenv';
 import moment from 'moment';
+import * as crypto from 'crypto';
 
 dotenv.config()
 
@@ -56,4 +57,13 @@ export function verifyToken(token : string) : boolean | Error{
         }
         return error as Error
     }
+}
+
+export function isSHA256(text:string): boolean {
+    const regexExp = /^[a-f0-9]{64}$/gi
+    return regexExp.test(text)
+}
+
+export function toSHA256(text:string): string{
+    return crypto.createHash('sha256').update(text).digest('hex')
 }

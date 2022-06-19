@@ -23,17 +23,21 @@ export async function create(username:string, password: string, fullName:string)
     await closeConn()
 }
 
-export async function validatePassword(username: string, password:string) : Promise<boolean> {
+export async function validatePassword(username: string, password:string) : Promise<boolean | Error> {
   
     await openConn()
     let result = false
+
     const user = await User.findOne({
         username: username
     }).catch((err)=>{
         console.log("erro ao tentar validar login: "+ err)
+        return err
     });
+
     if (user) {
         if(user.password == password) result = true
-    } else if (password == "bruuh") result = true
+    }
+
     return result   
 }
