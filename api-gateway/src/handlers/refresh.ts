@@ -4,6 +4,7 @@ import Token from '../models/token.dto'
 import { generateToken, verifyToken } from '../utils/auth.utils'
 
 const refresh = (req : Request, res: Response) => {
+    console.log("GET api/refresh")
     let token : string | Error | undefined = req.headers.authorization
 
     if(!token){

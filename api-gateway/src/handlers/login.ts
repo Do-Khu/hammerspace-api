@@ -5,6 +5,7 @@ import { generateToken, isSHA256, toSHA256 } from '../utils/auth.utils';
 import { validatePassword } from '../utils/repositories/userRepository'
 
 const login = async (req : Request, res : Response) =>{
+    console.log("POST api/auth")
     const loginInfo : LoginInfo = req.body
 
     if(!loginInfo.username || !loginInfo.password){

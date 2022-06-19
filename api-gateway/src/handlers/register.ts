@@ -4,6 +4,7 @@ import { isSHA256, toSHA256 } from '../utils/auth.utils'
 import { create } from '../utils/repositories/userRepository'
 
 const register = async (req : Request, res : Response) =>{
+    console.log("POST api/register")
     const registerInfo : RegisterUser = req.body
 
     if(!registerInfo.username || !registerInfo.password || !registerInfo.fullName){
