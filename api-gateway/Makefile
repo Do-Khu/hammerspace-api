@@ -20,9 +20,9 @@ down:
 logs:
 	docker compose -p $(PROJECT) logs -t -f
 
-
 reset-database:
-	rm -d -r -f ./mongo-data
+	$(MAKE) down
+	sudo rm -d -r -f ./mongo-data
 
 reset-dev:
 	$(MAKE) reset-database
