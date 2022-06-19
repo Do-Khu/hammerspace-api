@@ -10,13 +10,12 @@ const refresh = (req : Request, res: Response) => {
     if(!token){
         return res.status(401).end()
     }
-    console.log("token recebido: " + token)
+
     const payload = jwt.decode(token.replace("Bearer ", '') as string) as jwt.JwtPayload
-    console.log("payload sub: " + payload.sub)
-    console.log("payload exp: " + moment(payload.exp).toLocaleString())
 
     if(!payload){
-        console.log("veio vazio")
+        console.log("received empty payload")
+        res.status(400).end()
     }
 
     const isTokenValid = verifyToken(token.replace("Bearer ", '') as string)
