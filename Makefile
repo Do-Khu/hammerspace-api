@@ -1,3 +1,3 @@
 run-gateway:
 	cd api-gateway
-	make dev
+	$(MAKE) dev
