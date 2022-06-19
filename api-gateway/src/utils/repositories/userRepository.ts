@@ -1,5 +1,5 @@
 // import { Repository } from "typeorm";
-import { IUser, User } from "../../models/entities/user";
+import { IUser, User } from "../../models/entities/user.model";
 import database, { closeConn, openConn } from "../database.utils";
 // import { database } from "../database.utils";
 export async function getAll() {

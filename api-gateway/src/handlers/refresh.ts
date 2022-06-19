@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
 import moment from 'moment'
-import Token from '../models/token'
+import Token from '../models/token.dto'
 import { generateToken, verifyToken } from '../utils/auth.utils'
 
 const refresh = (req : Request, res: Response) => {

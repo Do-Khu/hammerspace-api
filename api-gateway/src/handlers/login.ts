@@ -1,6 +1,6 @@
 import { Response, Request } from 'express'
-import LoginInfo from "../models/login"
-import Token from '../models/token';
+import LoginInfo from "../models/loginInfo.dto"
+import Token from '../models/token.dto';
 import { generateToken } from '../utils/auth.utils';
 import { validatePassword } from '../utils/repositories/userRepository'
 
