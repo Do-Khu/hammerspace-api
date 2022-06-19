@@ -21,7 +21,8 @@ export async function create(username:string, password: string, fullName:string)
         isDeleted: false
     })
     await user.save().catch((err) => {
-        console.log("error on user creation: " + err)
+        console.log("Db error on user creation: " + err.message)
+        console.log(err.stack)
         return err
     })
     await closeConn()
@@ -31,6 +32,7 @@ export async function create(username:string, password: string, fullName:string)
 export async function validatePassword(username: string, password:string) : Promise<boolean | Error> {
   
     await openConn()
+    
     let result = false
 
     const user = await User.findOne({
@@ -43,6 +45,8 @@ export async function validatePassword(username: string, password:string) : Prom
     if (user) {
         if(user.password == password) result = true
     }
+
+    await closeConn()
 
     return result   
 }

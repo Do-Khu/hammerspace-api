@@ -20,8 +20,9 @@ const register = async (req : Request, res : Response) =>{
     }
     
     const err = create(registerInfo.username, registerInfo.password, registerInfo.fullName)
-    if (err != null){
-        console.log("error on user creation: " + err)
+    if (err != null && err instanceof Error){
+        console.log("error on user creation: " + err.message)
+        console.log(err.stack)
         return res.status(500).send()
     }
     
