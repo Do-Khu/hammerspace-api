@@ -1,14 +1,7 @@
 db = db.getSiblingDB('hammerspace');
-db.createUser({
-  user: 'hammerspace',
-  pwd: 'hammerspace',
-  roles: [
-    {
-      role: 'readWrite',
-      db: 'hammerspace'
-    }
-  ]
-});
+
+db.createCollection('user');
+
 db.user.insertMany([
  {
    username: 'potato',
