@@ -1,14 +1,16 @@
-import { IUser, User } from "../../models/entities/user.model";
+import { User } from "../../models/entities/user.model";
+import UserInfo from "../../models/userInfo.dto";
 import { closeConn, openConn } from "../database.utils";
 
-export async function getAll(): Promise<Error | IUser[]> {
+export async function getAll(): Promise<Error | UserInfo[]> {
     await openConn()
-    const users = await User.find().catch((err) => {
+    
+    const users = await User.find({isDeleted: false}).catch((err) => {
         console.log("Db error while getting user list: " + err.message)
         console.log(err.stack)
         return err
     })
-
+    
     await closeConn()
     return users || []
 }

@@ -66,8 +66,10 @@ export const listUsers = async (req: Request, res: Response) => {
         return res.status(500).send()
     }
 
+    // Garantindo que não seja retornado conteúdo extra
     users.forEach(u => {
         const user: UserInfo = {
+            _id: u._id,
             fullName: u.fullName,
             username: u.username,
             isActive: u.isActive,
