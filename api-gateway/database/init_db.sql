@@ -1,4 +1,4 @@
-CREATE USER hammerspace;
+CREATE USER hammerspace IDENTIFIED BY 'hammerspace';
 CREATE DATABASE hammerspace;
 GRANT ALL PRIVILEGES ON DATABASE hammerspace TO hammerspace;
 
