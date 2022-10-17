@@ -2,8 +2,12 @@ import { Response, Request } from 'express'
 import RegisterUser from '../models/registerUser.dto'
 import UserInfo from '../models/userInfo.dto'
 import { isSHA256, toSHA256, verifyToken } from '../utils/auth.utils'
-import { create, getAll } from '../utils/repositories/userRepository'
+// import { create, getAll } from '../utils/repositories/userRepository'
+import { UserRepository } from '../utils/repositories/userRepository'
 import jwt from 'jsonwebtoken'
+import { User } from '../models/entities/user.model'
+
+const userRepository = new UserRepository()
 
 export const register = async (req: Request, res: Response) => {
     console.log("POST api/register")
@@ -21,7 +25,7 @@ export const register = async (req: Request, res: Response) => {
         console.log("SHA256(pwd): " + registerInfo.password)
     }
 
-    const err = create(registerInfo.username, registerInfo.password, registerInfo.fullName)
+    const err = userRepository.create(registerInfo.username, registerInfo.password, registerInfo.fullName)
     if (err != null && err instanceof Error) {
         console.log("error on user creation: " + err.message)
         console.log(err.stack)
@@ -57,26 +61,12 @@ export const listUsers = async (req: Request, res: Response) => {
         return res.status(401).end()
     }
 
-    let list: UserInfo[] = []
-
-    const users = await getAll()
+    const users = await userRepository.getAll()
     if (users instanceof Error) {
         console.log("error on user creation: " + users.message)
         console.log(users.stack)
         return res.status(500).send()
     }
 
-    // Garantindo que não seja retornado conteúdo extra
-    users.forEach(u => {
-        const user: UserInfo = {
-            _id: u._id,
-            fullName: u.fullName,
-            username: u.username,
-            isActive: u.isActive,
-            isDeleted: u.isDeleted
-        }
-        list.push(user)
-    });
-
-    return res.status(200).send(list)
+    return res.status(200).send(users)
 }

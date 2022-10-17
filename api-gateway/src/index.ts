@@ -6,8 +6,8 @@ import router from './routers/route';
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
-const host = process.env.HOST;
+const port = parseInt(process.env.PORT || "9152");
+const host = process.env.HOST || "localhost";
 const web_host =  process.env.WEB_HOST;
 
 app.use(express.json())
@@ -30,6 +30,6 @@ app.use((req, res) => {
   res.status(404)
 })
 
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log(`⚡️[server]: Server is running at http://${host}:${port}`);
 });
