@@ -12,7 +12,7 @@ build:
 	npm run build
 
 up:
-	docker compose -p $(PROJECT) up -d
+	docker compose -p $(PROJECT) up -d --remove-orphans
 
 down:
 	docker compose -p $(PROJECT) down --remove-orphans

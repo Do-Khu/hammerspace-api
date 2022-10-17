@@ -23,7 +23,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 // export { User, userSchema, IUser }
 
-@Entity()
+@Entity({
+    database: "hammerspace",
+    name: "userClients",
+    schema: "public"
+})
 export class User{
     @PrimaryGeneratedColumn()
     id!: number;
