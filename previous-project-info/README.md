@@ -2,16 +2,15 @@
 
 ## Sobre o projeto
 
-Este é um projeto de estudos de desenvolvimento de aplicações com a utilização de microserviços, com o foco do desenvolvimento de uma aplicação para a matéria de programação ECM252 do Instituto Mauá de Tecnologia.
+Este é um projeto de estudos de desenvolvimento de aplicações com a utilização de microserviços, com o foco de propor um produto que pode ser utilizado em situações de guerra assim como é especificado no escopo da matéria de programação ECM252 do Instituto Mauá de Tecnologia.
 
-Portanto, o Hammerspace tem como escopo o controle de estoques de cartas de magic de um jogador, bem como seus decks. Como proposta inicial:
+Portanto, o Hammerspace tem como escopo o controle de estoques de suprimentos e materiais em abrigos sem revelar suas posições exatas, apresentando uma interface de interação e funcionamento gameficada. Como proposta inicial:
 
-- Um jogador pode criar uma conta
-- Um jogador pode criar um deck dividindo as cartas em Mainboard, Sideboard e Considerando
-- Um jogador pode pesquisar e adicionar cartas a um deck, ao adicionar uma carta o usuário pode informar se possui aquela carta ou não
-- Ao adicionar uma carta que o usuário possui a um deck o sistema deve informar que ele possui essa carta em estoque e se ela está sendo usada e por qual deck
-- O jogador pode adicionar cartas ao estoque sem estarem vinculadas a um deck
-- O jogador deve ser capaz de verificar a lista de compras das cartas faltantes de um deck
+- Um abrigo pode enviar suprimentos a outros abrigos
+- Um abrigo pode requisitar ajuda para envio de suprimentos
+- Um abrigo pode adquirir suprimentos externamente (comprando por via externa)
+- O aplicativo não faz gerenciamento de gastos financeiros do abrigo
+- O aplicativo faz uma estimativa de quanto tempo os suprimentos disponiveis devem durar e emite alertas para previos para seu reabastecimento
 
 ## Os microserviços
 
