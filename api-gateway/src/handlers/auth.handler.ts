@@ -2,8 +2,10 @@ import { Response, Request } from 'express'
 import LoginInfo from "../models/loginInfo.dto"
 import Token from '../models/token.dto'
 import { generateToken, isSHA256, toSHA256, verifyToken } from '../utils/auth.utils'
-import { validatePassword } from '../utils/repositories/userRepository'
+import { UserRepository } from '../utils/repositories/userRepository'
 import jwt from 'jsonwebtoken'
+
+let userRepository = new UserRepository()
 
 export const login = async (req: Request, res: Response) => {
     console.log("POST api/auth")
@@ -23,7 +25,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Comparar informações do usuário com o banco de dados
-    const isLoginOk = await validatePassword(loginInfo.username, loginInfo.password)
+    const isLoginOk = await userRepository.validatePassword(loginInfo.username, loginInfo.password)
     if (isLoginOk instanceof Error) {
         // TODO: logar erro em arquivo
         console.log("An error happened while trying to validate user info.")
