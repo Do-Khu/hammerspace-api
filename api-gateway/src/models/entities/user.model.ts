@@ -1,6 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({
+    database: "hammerspace",
+    name: "userClients",
+    schema: "public"
+})
 export class User{
     @PrimaryGeneratedColumn()
     id!: number;
