@@ -53,21 +53,17 @@ export class UserRepository{
 
     // check user password
     async validatePassword(username:string, password:string) : Promise<boolean | Error> {
-        this.init()
         let result = false
-        const user = await this.userRepository.findOne({
-            where:{
-                username: username
-            }
-        }).catch((err) => {
+        //select * from "userClients" where username='+"'bruh'"+' LIMIT 1;
+        const user = await this.userRepository.query(`select * from "userClients" where username='${username}' LIMIT 1;`).catch((err) => {
             console.log("Db error on login validation: " + err.message)
             console.log(err.stack)
             return err
         })
         .finally(()=>{db.destroy()})
-    
-        if (user) {
-            if (user.password == password) result = true
+        console.log(user[0].isactive)
+        if (user[0].isactive) {
+            if (user[0].password == password) result = true
         }
 
         return result 
