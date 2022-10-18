@@ -1,7 +1,7 @@
 CREATE USER hammerspace WITH PASSWORD 'hammerspace';
 CREATE DATABASE hammerspace;
+--CREATE ROLE hammerspace LOGIN PASSWORD 'hammerspace';
 GRANT ALL PRIVILEGES ON DATABASE hammerspace TO hammerspace;
-
 
 \c hammerspace
 
