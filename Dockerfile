@@ -1,6 +1,6 @@
 FROM node:latest
 WORKDIR /api-gateway
-COPY ./api-gateway/package.json ./
+COPY ./api-gateway/package*.json ./
 COPY ./api-gateway/.env ./
 
 RUN npm install
