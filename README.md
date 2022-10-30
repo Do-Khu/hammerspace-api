@@ -15,9 +15,10 @@ Portanto, o Hammerspace tem como escopo o controle de estoques de cartas de magi
 
 ## Os microserviços
 
-Atualmente a aplicação possui 1 microserviço:
+Atualmente a aplicação possui 2 microsserviços:
 
-- **api-gateway**: a porta de entrada da aplicação, todas as iterações externas devem ser feitas à esse microserviço que irá chamar os demais necessários para realizar os comandos requisitados. Atualmente está realizando o controle de: *Usuários*.
+- **[api-gateway](https://github.com/Do-Khu/hammerspace-api)**: a porta de entrada da aplicação, todas as iterações externas devem ser feitas à esse microserviço que irá chamar os demais necessários para realizar os comandos requisitados. Atualmente está realizando o controle de: *Usuários*.
+- **[cards](https://github.com/Do-Khu/hammerspace-card)**: Microsserviço de consulta de cartas de magic.
 
 ## Consumindo a API
 
