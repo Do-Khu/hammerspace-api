@@ -3,7 +3,7 @@ run-gateway:
 	$(MAKE) dev
 
 build-docker:
-	docker build . -t hammerspace
+	docker build . -t api-gateway
 
 up-database:
 	cd api-gateway
@@ -12,4 +12,5 @@ up-database:
 run:
 	$(MAKE) up-database
 	$(MAKE) build-docker
-	docker run -p 9152:9152 -d hammerspace:latest
+	# docker run -p 9152:9152 -d api-gateway:latest
+	kubectl apply -f api-gateway.yaml
