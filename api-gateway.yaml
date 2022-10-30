@@ -10,8 +10,8 @@ spec:
   template:
     metadata:
       labels:
-      app:api-gateway
+        app: api-gateway
     spec:
       containers:
-        - name: api-gateway
-          image: api-gateway:latest
+      - name: api-gateway
+        image: api-gateway:latest
