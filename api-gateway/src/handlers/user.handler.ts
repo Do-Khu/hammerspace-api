@@ -1,11 +1,9 @@
 import { Response, Request } from 'express'
 import RegisterUser from '../models/registerUser.dto'
-import UserInfo from '../models/userInfo.dto'
 import { isSHA256, toSHA256, verifyToken } from '../utils/auth.utils'
 // import { create, getAll } from '../utils/repositories/userRepository'
 import { UserRepository } from '../utils/repositories/userRepository'
 import jwt from 'jsonwebtoken'
-import { User } from '../models/entities/user.model'
 
 const userRepository = new UserRepository()
 
@@ -63,7 +61,7 @@ export const listUsers = async (req: Request, res: Response) => {
 
     const users = await userRepository.getAll()
     if (users instanceof Error) {
-        console.log("error on user creation: " + users.message)
+        console.log("error on listing users: " + users.message)
         console.log(users.stack)
         return res.status(500).send()
     }

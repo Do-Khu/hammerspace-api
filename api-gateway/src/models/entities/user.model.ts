@@ -15,12 +15,12 @@ export class User{
     @Column()
     password!: string;
 
-    @Column()
-    fullName!: string;
+    @Column({name: "fullname"})
+    fullname!: string;
 
     @Column()
-    isActive!: boolean;
+    isactive!: boolean;
 
     @Column()
-    isDeleted!: boolean;
+    isdeleted!: boolean;
 }
