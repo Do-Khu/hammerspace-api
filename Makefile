@@ -12,5 +12,4 @@ up-database:
 run:
 	$(MAKE) up-database
 	$(MAKE) build-docker
-	# docker run -p 9152:9152 -d api-gateway:latest
-	kubectl apply -f api-gateway.yaml
+	docker run -p 9152:9152 -d api-gateway:latest
