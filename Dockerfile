@@ -1,10 +1,10 @@
 FROM node:latest
 WORKDIR /api-gateway
-COPY package*.json ./
-COPY .env ./
+COPY ./api-gateway/package.json ./
+COPY ./api-gateway/.env ./
 
 RUN npm install
-COPY . .
+COPY ./api-gateway .
 
 RUN npm run build
 EXPOSE 9152
