@@ -60,7 +60,7 @@ export function verifyToken(token : string) : boolean | Error{
     }
 }
 
-export function validateBearerToken(bearer: string | undefined, res: Response): undefined | Response{
+export function validateBearerToken(bearer: string | undefined, res: Response): string | Response {
     if (!bearer) {
         return res.status(401).send()
     }
@@ -83,7 +83,7 @@ export function validateBearerToken(bearer: string | undefined, res: Response): 
         return res.status(401).send()
     }
 
-    return
+    return payload.sub || ''
 }
 
 export function isSHA256(text:string): boolean {

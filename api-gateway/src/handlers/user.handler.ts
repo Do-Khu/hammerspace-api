@@ -3,7 +3,6 @@ import RegisterUser from '../models/registerUser.dto'
 import { isSHA256, toSHA256, validateBearerToken, verifyToken } from '../utils/auth.utils'
 // import { create, getAll } from '../utils/repositories/userRepository'
 import { UserRepository } from '../utils/repositories/userRepository'
-import jwt from 'jsonwebtoken'
 
 const userRepository = new UserRepository()
 
@@ -38,7 +37,7 @@ export const listUsers = async (req: Request, res: Response) => {
     let token: string | Error | undefined = req.headers.authorization
 
     const validateResult = validateBearerToken(token, res)
-    if (validateResult) {
+    if (validateResult instanceof Response) {
         return validateResult
     }
 

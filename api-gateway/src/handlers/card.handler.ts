@@ -6,7 +6,7 @@ export const findCardsByName = async(req: Request, res: Response) =>{
     let token: string | Error | undefined = req.headers.authorization
 
     const validateResult = validateBearerToken(token, res)
-    if (validateResult) {
+    if (validateResult instanceof Response) {
         return validateResult
     }
 
@@ -34,7 +34,7 @@ export const listCards = async(req: Request, res: Response) =>{
     let token: string | Error | undefined = req.headers.authorization
 
     const validateResult = validateBearerToken(token, res)
-    if (validateResult) {
+    if (validateResult instanceof Response) {
         return validateResult
     }
 
@@ -56,7 +56,7 @@ export const getCard = async(req: Request, res: Response) =>{
     let token: string | Error | undefined = req.headers.authorization
 
     const validateResult = validateBearerToken(token, res)
-    if (validateResult) {
+    if (validateResult instanceof Response) {
         return validateResult
     }
 
