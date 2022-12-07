@@ -1,19 +1,6 @@
 version: '3.7'
 
 services:
-  # mongodb:
-  #   image: mongo
-  #   restart: always
-  #   ports:
-  #   - "27017:27017"
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: hammerspace
-  #     MONGO_INITDB_ROOT_PASSWORD: hammerspace
-  #     MONGO_INITDB_DATABASE: hammerspace
-  #   volumes: 
-  #   - ./mongo-data:/data/db
-  #   - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-
   postgres:
       image: postgres:14-alpine
       restart: always
