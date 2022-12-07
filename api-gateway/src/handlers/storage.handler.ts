@@ -98,7 +98,7 @@ export const reserveCardFromStorage = async(req: Request, res: Response) =>{
     return res.status(200).send(storageList)
 }
 
-export const findCardsByName = async(req: Request, res: Response) =>{
+export const findStorageCardsByName = async(req: Request, res: Response) =>{
     console.log("GET api/storage/:name")
     let token: string | Error | undefined = req.headers.authorization
 
