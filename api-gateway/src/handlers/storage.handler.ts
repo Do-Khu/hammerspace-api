@@ -1,8 +1,10 @@
 import { Response, Request } from 'express'
 import { validateBearerToken } from '../utils/auth.utils'
+import { CardUtil } from '../utils/card.utils'
 import { UserRepository } from '../utils/repositories/userRepository'
 
 const userRepository = new UserRepository()
+const cardUtil = new CardUtil()
 
 export const getMyStorage = async(req: Request, res: Response) =>{
     console.log("GET api/storage")
@@ -135,15 +137,15 @@ export const findStorageCardsByName = async(req: Request, res: Response) =>{
 export const addCardToStorage = async(req: Request, res: Response) =>{
     console.log("POST api/storage")
     let token: string | Error | undefined = req.headers.authorization
-    const cardInfo: StorageCardInput = req.body
+    const cardInfo: AddCardDto = req.body
 
     const validateResult = await validateBearerToken(token, res)
     if (validateResult instanceof Response) {
         return validateResult
     }
 
-    if (!cardInfo.cardId || !cardInfo.cardname || !cardInfo.coloridentity) {
-        console.log("Please, inform the cardId, cardname and coloridentity to add a new card to your storage")
+    if (!cardInfo.cardId) {
+        console.log("Please, inform the cardId to add a new card to your storage")
         return res.status(400).send()
     }
 
@@ -152,10 +154,21 @@ export const addCardToStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
+
+    const card = await cardUtil.fetchCardInfo(cardInfo.cardId)
+    if(!card)
+        return res.status(404).send("card not found")
+
+    const input: StorageCardInput = {
+        cardId: cardInfo.cardId,
+        cardname: card.cardname,
+        coloridentity: card.coloridentity
+    }
+
     const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
     const result = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(cardInfo)
+        body: JSON.stringify(input)
     })
 
     if(!result.ok && result.status != 200){

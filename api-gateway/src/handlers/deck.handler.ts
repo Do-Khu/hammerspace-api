@@ -1,8 +1,10 @@
 import { Response, Request } from 'express'
 import { validateBearerToken } from '../utils/auth.utils'
+import { CardUtil } from '../utils/card.utils'
 import { UserRepository } from '../utils/repositories/userRepository'
 
 const userRepository = new UserRepository()
+const cardUtil = new CardUtil()
 
 export const getMyDecks = async(req: Request, res: Response) =>{
     console.log("GET api/decks")
@@ -109,15 +111,16 @@ export const removeCardFromDeck = async(req: Request, res: Response) =>{
 export const createDeck = async(req: Request, res: Response) =>{
     console.log("POST api/decks")
     let token: string | Error | undefined = req.headers.authorization
-    const deckInfo: DeckInput = req.body
+    const deckInfo: CreateDeckDto = req.body
+    
 
     const validateResult = await validateBearerToken(token, res)
     if (validateResult instanceof Response) {
         return validateResult
     }
 
-    if (!deckInfo.cardName || !deckInfo.colorIdentity || !deckInfo.commanderCardId || !deckInfo.deckName) {
-        console.log("Please, inform the cardId, cardname, deckname and coloridentity to add a new deck to your storage")
+    if (!deckInfo.commanderCardId || !deckInfo.deckName) {
+        console.log("Please, inform the cardId and deckname to add a new deck to your storage")
         return res.status(400).send()
     }
 
@@ -127,15 +130,26 @@ export const createDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
+    const card = await cardUtil.fetchCardInfo(deckInfo.commanderCardId)
+    if(!card)
+        return res.status(404).send("card not found")
+
+    const input: DeckInput = {
+        cardName: card.cardname,
+        colorIdentity: card.coloridentity,
+        commanderCardId: deckInfo.commanderCardId,
+        deckName: deckInfo.deckName
+    }
+
     const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks'
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
             userId: currentUser.id,
-            deckName: deckInfo.deckName,
-            commanderCardId: deckInfo.commanderCardId,
-            cardName: deckInfo.cardName,
-            colorIdentity: deckInfo.colorIdentity
+            deckName: input.deckName,
+            commanderCardId: input.commanderCardId,
+            cardName: input.cardName,
+            colorIdentity: input.colorIdentity
         })
     })
 
@@ -149,14 +163,14 @@ export const createDeck = async(req: Request, res: Response) =>{
 export const updateDeck = async(req: Request, res: Response) =>{
     console.log("POST api/decks/:deckid")
     let token: string | Error | undefined = req.headers.authorization
-    const deckInfo: DeckInput = req.body
+    const deckInfo: CreateDeckDto = req.body
 
     const validateResult = await validateBearerToken(token, res)
     if (validateResult instanceof Response) {
         return validateResult
     }
 
-    if (!deckInfo.cardName || !deckInfo.colorIdentity || !deckInfo.commanderCardId || !deckInfo.deckName) {
+    if (!deckInfo.commanderCardId || !deckInfo.deckName) {
         console.log("Please, inform the cardId, cardname, deckname and coloridentity to add a new deck to your storage")
         return res.status(400).send()
     }
@@ -173,15 +187,26 @@ export const updateDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
+    const card = await cardUtil.fetchCardInfo(deckInfo.commanderCardId)
+    if(!card)
+        return res.status(404).send("card not found")
+        
+    const input: DeckInput = {
+        cardName: card.cardname,
+        colorIdentity: card.coloridentity,
+        commanderCardId: deckInfo.commanderCardId,
+        deckName: deckInfo.deckName
+    }
+
     const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
             userId: currentUser.id,
-            deckName: deckInfo.deckName,
-            commanderCardId: deckInfo.commanderCardId,
-            cardName: deckInfo.cardName,
-            colorIdentity: deckInfo.colorIdentity
+            deckName: input.deckName,
+            commanderCardId: input.commanderCardId,
+            cardName: input.cardName,
+            colorIdentity: input.colorIdentity
         })
     })
 
@@ -195,15 +220,15 @@ export const updateDeck = async(req: Request, res: Response) =>{
 export const addCardToDeck = async(req: Request, res: Response) =>{
     console.log("POST api/decks/:id")
     let token: string | Error | undefined = req.headers.authorization
-    const cardInfo: DeckCardInput = req.body
+    const cardInfo: AddCardDto = req.body
 
     const validateResult = await validateBearerToken(token, res)
     if (validateResult instanceof Response) {
         return validateResult
     }
 
-    if (!cardInfo.cardName || !cardInfo.cardId || !cardInfo.cardPrice || !cardInfo.coloridentity) {
-        console.log("Please, inform the cardId, cardname, cardPrice and coloridentity to add a new card to your deck")
+    if (!cardInfo.cardId) {
+        console.log("Please, inform the cardId to add a new card to your deck")
         return res.status(400).send()
     }
 
@@ -219,10 +244,20 @@ export const addCardToDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
+    const card = await cardUtil.fetchCardInfo(cardInfo.cardId)
+    if(!card)
+        return res.status(404).send("card not found")
+
+    const input:DeckCardInput = {
+        cardId: card.id,
+        cardName: card.cardname,
+        coloridentity: card.coloridentity
+    }
+
     const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
     const result = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(cardInfo)
+        body: JSON.stringify(input)
     })
 
     if(!result.ok && result.status != 200){
