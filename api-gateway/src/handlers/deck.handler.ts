@@ -20,7 +20,7 @@ export const getMyDecks = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + currentUser.id
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}`
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -57,8 +57,8 @@ export const getDeck = async(req: Request, res: Response) =>{
     }
 
     // recuperar dados do deck
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' 
-                + currentUser.id + '/' + deckId
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}`
+             + '/' + deckId
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -127,8 +127,8 @@ export const removeCardFromDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' 
-                + currentUser.id + '/' + deckId + '/' + cardid
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}` 
+                + '/' + deckId + '/' + cardid
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -178,7 +178,7 @@ export const createDeck = async(req: Request, res: Response) =>{
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
-            userId: currentUser.id,
+            userId: JSON.parse(JSON.stringify(currentUser))[0].id,
             deckName: input.deckName,
             commanderCardId: input.commanderCardId,
             cardName: input.cardName,
