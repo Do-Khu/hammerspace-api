@@ -23,7 +23,7 @@ export const getMyStorage = async(req: Request, res: Response) =>{
     // eu odeio o typeorm
     const userId = JSON.parse(JSON.stringify(currentUser))[0].id
     console.log(userId)
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352/') + 'api/storage?userid=' + userId
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352/') + 'api/storage/' + userId
     const result = await fetch(url, {
         method: 'GET'
     })
