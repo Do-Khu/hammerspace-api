@@ -15,7 +15,7 @@ router.get('/users', listUsers)
 
 router.get('/cards', listCards)
 router.get('/cards/:id', getCard)
-router.get('/cards/:name', findCardsByName)
+router.get('/cards/search/:name', findCardsByName)
 
 router.get('/storage', getMyStorage)
 router.get('/storage/:name', findStorageCardsByName)
@@ -26,7 +26,7 @@ router.post('/storage', addCardToStorage)
 router.get('/decks', getMyDecks)
 router.get('/decks/:id', getDeck)
 router.get('/decks/:id/:cardid', removeCardFromDeck)
-router.post('/decks/:deckid', updateDeck)
+router.post('/decks/:deckid/update', updateDeck)
 router.post('/decks', createDeck)
 router.post('/decks/:id', addCardToDeck)
 

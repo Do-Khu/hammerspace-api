@@ -2,7 +2,7 @@ import { Response, Request } from 'express'
 import { validateBearerToken } from '../utils/auth.utils'
 
 export const findCardsByName = async(req: Request, res: Response) =>{
-    console.log("GET api/cards/:name")
+    console.log("GET api/cards/search/:name")
     let token: string | Error | undefined = req.headers.authorization
 
     const validateResult = validateBearerToken(token, res)
@@ -16,7 +16,7 @@ export const findCardsByName = async(req: Request, res: Response) =>{
         return res.status(400).send("couldn't get name param value")
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/cards/' + cardName
+    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/cards/find/' + cardName
     const result = await fetch(url, {
         method: 'GET'
     })
