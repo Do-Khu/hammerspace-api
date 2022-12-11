@@ -16,7 +16,7 @@ export const findCardsByName = async(req: Request, res: Response) =>{
         return res.status(400).send("couldn't get name param value")
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/cards/find/' + cardName
+    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/cards/search/' + cardName
     const result = await fetch(url, {
         method: 'GET'
     })
