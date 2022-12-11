@@ -20,7 +20,7 @@ export const getMyDecks = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' + currentUser.id
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + currentUser.id
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -37,6 +37,7 @@ export const getDeck = async(req: Request, res: Response) =>{
     console.log("GET api/decks/:id")
     let token: string | Error | undefined = req.headers.authorization
 
+    // validar token
     const validateResult = await validateBearerToken(token, res)
     if (validateResult instanceof Response) {
         return validateResult
@@ -48,12 +49,15 @@ export const getDeck = async(req: Request, res: Response) =>{
         return res.status(400).send("couldn't get deckId param value")
     }
 
+    // recuperar usuário baseado na sessão atual
     const currentUser = await userRepository.getUserFromUsername(validateResult as string)
     if(currentUser instanceof Error){
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' 
+
+    // recuperar dados do deck
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' 
                 + currentUser.id + '/' + deckId
     const result = await fetch(url, {
         method: 'GET'
@@ -63,8 +67,37 @@ export const getDeck = async(req: Request, res: Response) =>{
         return res.status(result.status).send()
     }
     
-    const deck = (await result.json())
-    return res.status(200).send(deck)
+    // recuperar imagem do card comunicando com o card service
+    const deckResult = (await result.json()) as GetDeckResult
+    let deck: DeckDto = {
+        cardname: deckResult.cardname,
+        coloridentity: deckResult.coloridentity,
+        deckname: deckResult.deckname,
+        commandercardid: deckResult.commandercardid,
+        ownedCards: deckResult.ownedCards,
+        totalcards: deckResult.totalcards,
+        id: deckResult.id,
+        cards: []
+    }
+
+    for (let i = 0; i < deck.cards.length; i++) {
+        const c = deck.cards[i]
+        const card = await cardUtil.fetchCardInfo(c.cardid)
+        if(!card)
+            return res.status(404).send("card not found")
+
+        deck.cards.push({
+            cardid: c.cardid,
+            cardName: c.cardName,
+            colorIdentity: c.colorIdentity,
+            imglink: card.imglink,
+            amount: c.amount,
+            reservedStorageAmount: c.reservedStorageAmount,
+            storageAmount: c.storageAmount
+        })
+    };
+
+    return res.status(200).send(deckResult)
 }
 
 export const removeCardFromDeck = async(req: Request, res: Response) =>{
@@ -94,7 +127,7 @@ export const removeCardFromDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' 
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' 
                 + currentUser.id + '/' + deckId + '/' + cardid
     const result = await fetch(url, {
         method: 'GET'
@@ -141,7 +174,7 @@ export const createDeck = async(req: Request, res: Response) =>{
         deckName: deckInfo.deckName
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks'
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks'
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -198,7 +231,7 @@ export const updateDeck = async(req: Request, res: Response) =>{
         deckName: deckInfo.deckName
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -254,7 +287,7 @@ export const addCardToDeck = async(req: Request, res: Response) =>{
         coloridentity: card.coloridentity
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(input)
