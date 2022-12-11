@@ -43,7 +43,7 @@ export const getDeck = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const deckId = req.query.id || ''
+    const deckId = req.params.id || ''
     if(typeof deckId !== "string" || deckId == ''){
         console.log("couldn't get deckId param value")
         return res.status(400).send("couldn't get deckId param value")
@@ -109,13 +109,13 @@ export const removeCardFromDeck = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const deckId = req.query.id || ''
+    const deckId = req.params.id || ''
     if(typeof deckId !== "string" || deckId == ''){
         console.log("couldn't get storageid param value")
         return res.status(400).send("couldn't get storageid param value")
     }
 
-    const cardid = req.query.cardid || ''
+    const cardid = req.params.cardid || ''
     if(typeof cardid !== "string" || cardid == ''){
         console.log("couldn't get storageid param value")
         return res.status(400).send("couldn't get storageid param value")
@@ -212,7 +212,7 @@ export const updateDeck = async(req: Request, res: Response) =>{
         return res.status(400).send()
     }
 
-    const deckId = req.query.deckid || ''
+    const deckId = req.params.deckid || ''
     if(typeof deckId !== "string" || deckId == ''){
         console.log("couldn't get deckId param value")
         return res.status(400).send("couldn't get deckId param value")
@@ -271,7 +271,7 @@ export const addCardToDeck = async(req: Request, res: Response) =>{
         return res.status(400).send()
     }
 
-    const deckId = req.query.id || ''
+    const deckId = req.params.id || ''
     if(typeof deckId !== "string" || deckId == ''){
         console.log("couldn't get deckId param value")
         return res.status(400).send("couldn't get deckId param value")

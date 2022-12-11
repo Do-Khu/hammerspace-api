@@ -10,7 +10,7 @@ export const findCardsByName = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const cardName = req.query.name || ''
+    const cardName = req.params.name || ''
     if(typeof cardName !== "string" || cardName == ''){
         console.log("couldn't get name param value")
         return res.status(400).send("couldn't get name param value")
@@ -60,7 +60,7 @@ export const getCard = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const id = req.query.id || ''
+    const id = req.params.id || ''
     if(typeof id !== "string" || id === ''){
         console.log("couldn't get id param value")
         return res.status(400).send("couldn't get id param value")

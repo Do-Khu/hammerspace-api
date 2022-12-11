@@ -21,14 +21,14 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
     // eu odeio o typeorm
-    console.log(JSON.parse(JSON.stringify(currentUser))[0].id)
     const userId = JSON.parse(JSON.stringify(currentUser))[0].id
     console.log(userId)
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352/') + 'api/storage?userid=' + userId
     const result = await fetch(url, {
         method: 'GET'
     })
 
+    console.log(result)
     if(!result.ok && result.status != 200){
         return res.status(result.status).send()
     }
@@ -65,7 +65,7 @@ export const removeCardFromStorage = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const storageId = req.query.id || ''
+    const storageId = req.params.id || ''
     if(typeof storageId !== "string" || storageId == ''){
         console.log("couldn't get storageid param value")
         return res.status(400).send("couldn't get storageid param value")
@@ -102,7 +102,7 @@ export const reserveCardFromStorage = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const storageId = req.query.id || ''
+    const storageId = req.params.id || ''
     if(typeof storageId !== "string" || storageId == ''){
         console.log("couldn't get storageid param value")
         return res.status(400).send("couldn't get storageid param value")
@@ -139,7 +139,7 @@ export const findStorageCardsByName = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const cardname = req.query.id || ''
+    const cardname = req.params.id || ''
     if(typeof cardname !== "string" || cardname == ''){
         console.log("couldn't get cardname param value")
         return res.status(400).send("couldn't get cardname param value")
