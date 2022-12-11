@@ -20,6 +20,9 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
+
+    console.log(currentUser)
+
     const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
     const result = await fetch(url, {
         method: 'GET'
