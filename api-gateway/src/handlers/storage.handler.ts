@@ -20,7 +20,7 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -53,7 +53,7 @@ export const removeCardFromStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' 
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' 
                 + currentUser.id + '/' + storageId + '/remove'
     const result = await fetch(url, {
         method: 'GET'
@@ -86,7 +86,7 @@ export const reserveCardFromStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' 
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' 
                 + currentUser.id + '/' + storageId + '/reserve'
     const result = await fetch(url, {
         method: 'GET'
@@ -120,7 +120,7 @@ export const findStorageCardsByName = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' 
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' 
                 + currentUser.id + '/' + cardname
     const result = await fetch(url, {
         method: 'GET'
@@ -165,7 +165,7 @@ export const addCardToStorage = async(req: Request, res: Response) =>{
         coloridentity: card.coloridentity
     }
 
-    const url = (process.env.CARD_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + currentUser.id
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(input)
