@@ -29,8 +29,27 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         return res.status(result.status).send()
     }
     
-    const storageList = (await result.json())
-    return res.status(200).send(storageList)
+    const storageList = (await result.json()) as StorageCardResult[]
+    let list: StorageCardDto[] = []
+
+    for (let i = 0; i < storageList.length; i++) {
+        const c = storageList[i]
+        const card = await cardUtil.fetchCardInfo(c.cardid)
+        if(!card)
+            return res.status(404).send("card not found")
+
+        list.push({
+            id: c.id,
+            cardId: c.cardid,
+            cardName: c.cardname,
+            colorIdentity: c.coloridentity,
+            imgLink: card.imglink,
+            deckId: c.deckid,
+            isReserved: c.isreserved
+        })
+    };
+
+    return res.status(200).send(list)
 }
 
 export const removeCardFromStorage = async(req: Request, res: Response) =>{
