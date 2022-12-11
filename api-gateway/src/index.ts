@@ -10,8 +10,15 @@ const port = parseInt(process.env.PORT || "9152");
 const host = process.env.HOST || "localhost";
 const web_host =  process.env.WEB_HOST;
 
+const allowHeaders = function(req: Request, res: Response, next: any){
+  res.header('Access-Control-Allow-Headers','*')
+  res.header('Access-Control-Allow-Origin','*')
+  next()
+}
+
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(allowHeaders)
 
 app.get('/ping', (req: Request, res: Response) => {
   res.send('Pong! :3');
@@ -19,7 +26,8 @@ app.get('/ping', (req: Request, res: Response) => {
 
 // Cors
 app.use(cors({
-  origin: [web_host + '']
+  origin: [web_host + ''],
+  credentials: true
 }))
 
 // Rotas
