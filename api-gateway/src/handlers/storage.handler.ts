@@ -21,7 +21,10 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
     // eu odeio o typeorm
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' +JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(JSON.parse(JSON.stringify(currentUser))[0].id)
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -73,8 +76,12 @@ export const removeCardFromStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') 
-            + 'api/storage/' +JSON.parse(JSON.stringify(currentUser))[0].id + '/' + storageId + '/remove'
+    
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId 
+                + '/' + storageId + '/remove'
+
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -106,7 +113,10 @@ export const reserveCardFromStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' +JSON.parse(JSON.stringify(currentUser))[0].id
+    
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log("userid:" + userId)
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId
                 + '/' + storageId + '/reserve'
     const result = await fetch(url, {
         method: 'GET'
@@ -140,7 +150,9 @@ export const findStorageCardsByName = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' +JSON.parse(JSON.stringify(currentUser))[0].id 
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId 
                + '/' + cardname
     const result = await fetch(url, {
         method: 'GET'
@@ -174,7 +186,9 @@ export const addCardToStorage = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-
+    
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
     const card = await cardUtil.fetchCardInfo(cardInfo.cardId)
     if(!card)
         return res.status(404).send("card not found")
@@ -185,7 +199,7 @@ export const addCardToStorage = async(req: Request, res: Response) =>{
         coloridentity: card.coloridentity
     }
 
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + JSON.parse(JSON.stringify(currentUser))[0].id
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(input)

@@ -20,7 +20,7 @@ export const getMyDecks = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}`
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + JSON.parse(JSON.stringify(currentUser))[0].id
     const result = await fetch(url, {
         method: 'GET'
     })
@@ -57,7 +57,7 @@ export const getDeck = async(req: Request, res: Response) =>{
     }
 
     // recuperar dados do deck
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}`
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + JSON.parse(JSON.stringify(currentUser))[0].id
              + '/' + deckId
     const result = await fetch(url, {
         method: 'GET'
@@ -127,7 +127,9 @@ export const removeCardFromDeck = async(req: Request, res: Response) =>{
         return res.status(500).send()
     }
 
-    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + `api/decks/${JSON.parse(JSON.stringify(currentUser))[0].id}` 
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
+    const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + userId
                 + '/' + deckId + '/' + cardid
     const result = await fetch(url, {
         method: 'GET'
@@ -162,6 +164,8 @@ export const createDeck = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
 
     const card = await cardUtil.fetchCardInfo(deckInfo.commanderCardId)
     if(!card)
@@ -178,7 +182,7 @@ export const createDeck = async(req: Request, res: Response) =>{
     const result = await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
-            userId: JSON.parse(JSON.stringify(currentUser))[0].id,
+            userId: userId,
             deckName: input.deckName,
             commanderCardId: input.commanderCardId,
             cardName: input.cardName,
@@ -219,7 +223,9 @@ export const updateDeck = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
-
+    
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
     const card = await cardUtil.fetchCardInfo(deckInfo.commanderCardId)
     if(!card)
         return res.status(404).send("card not found")
@@ -276,6 +282,9 @@ export const addCardToDeck = async(req: Request, res: Response) =>{
         console.log(currentUser)
         return res.status(500).send()
     }
+    
+    const userId = JSON.parse(JSON.stringify(currentUser))[0].id
+    console.log(userId)
 
     const card = await cardUtil.fetchCardInfo(cardInfo.cardId)
     if(!card)
