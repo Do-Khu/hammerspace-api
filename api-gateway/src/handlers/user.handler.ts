@@ -1,9 +1,8 @@
 import { Response, Request } from 'express'
 import RegisterUser from '../models/registerUser.dto'
-import { isSHA256, toSHA256, verifyToken } from '../utils/auth.utils'
+import { isSHA256, toSHA256, validateBearerToken, verifyToken } from '../utils/auth.utils'
 // import { create, getAll } from '../utils/repositories/userRepository'
 import { UserRepository } from '../utils/repositories/userRepository'
-import jwt from 'jsonwebtoken'
 
 const userRepository = new UserRepository()
 
@@ -35,28 +34,11 @@ export const register = async (req: Request, res: Response) => {
 
 export const listUsers = async (req: Request, res: Response) => {
     console.log("GET api/users")
-    // TODO: generalizar validação do token
     let token: string | Error | undefined = req.headers.authorization
 
-    if (!token) {
-        return res.status(401).end()
-    }
-
-    const payload = jwt.decode(token.replace("Bearer ", '') as string) as jwt.JwtPayload
-
-    if (!payload) {
-        console.log("received empty payload")
-        return res.status(400).end()
-    }
-
-    const isTokenValid = verifyToken(token.replace("Bearer ", '') as string)
-    if (isTokenValid instanceof Error) {
-        console.log(isTokenValid.message)
-        console.log(isTokenValid.stack)
-        return res.status(500).end()
-    }
-    if (!isTokenValid) {
-        return res.status(401).end()
+    const validateResult = validateBearerToken(token, res)
+    if (validateResult instanceof Response) {
+        return validateResult
     }
 
     const users = await userRepository.getAll()

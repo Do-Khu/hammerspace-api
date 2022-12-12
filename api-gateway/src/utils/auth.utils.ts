@@ -1,4 +1,5 @@
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
+import { Response } from 'express'
 import dotenv from 'dotenv';
 import moment from 'moment';
 import * as crypto from 'crypto';
@@ -57,6 +58,32 @@ export function verifyToken(token : string) : boolean | Error{
         }
         return error as Error
     }
+}
+
+export function validateBearerToken(bearer: string | undefined, res: Response): string | Response {
+    if (!bearer) {
+        return res.status(401).send()
+    }
+
+    const token = bearer.replace("Bearer ", '') as string
+    const payload = jwt.decode(token) as jwt.JwtPayload
+    if (!payload) {
+        console.log("received empty payload")
+        return res.status(401).send()
+    }
+
+    const isTokenValid = verifyToken(token)
+    if (isTokenValid instanceof Error) {
+        console.log(isTokenValid.message)
+        console.log(isTokenValid.stack)
+        return res.status(500).send()
+    }
+
+    if (!isTokenValid) {
+        return res.status(401).send()
+    }
+
+    return payload.sub || ''
 }
 
 export function isSHA256(text:string): boolean {

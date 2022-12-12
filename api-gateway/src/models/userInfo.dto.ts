@@ -1,5 +1,5 @@
 type UserInfo = {
-    _id: string
+    id: string
     username: string
     fullName: string
     isActive: boolean

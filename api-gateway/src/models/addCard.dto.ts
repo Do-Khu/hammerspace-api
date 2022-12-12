@@ -1,0 +1,3 @@
+type AddCardDto = {
+    cardId: number
+}

@@ -70,4 +70,15 @@ export class UserRepository{
         
         return result 
     }
+
+    async getUserFromUsername(username: string): Promise<User | Error>{
+        await this.init()
+        const user = await this.userRepository.findBy({username: username}).catch((err)=>{
+            console.log("an error happened while trying to recover user by their username")
+            console.log(err)
+            return err
+        }).finally(()=>{db.destroy()})
+
+        return user
+    }
 }
