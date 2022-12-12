@@ -77,7 +77,7 @@ export class UserRepository{
             console.log("an error happened while trying to recover user by their username")
             console.log(err)
             return err
-        }).finally(()=>{db.destroy()})
+        })//.finally(()=>{db.destroy()})
 
         return user
     }
