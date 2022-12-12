@@ -6,3 +6,13 @@ type DeckCardResult = {
     storageAmount: number,
     reservedStorageAmount: number
 }
+
+// type DeckCardResult = {
+//     id: number,
+//     cardid: number,
+//     cardname: string,
+//     coloridentity: string,
+//     shouldBuyCard: boolean,
+//     deckid: number,
+//     storageId: number
+// }
