@@ -138,7 +138,7 @@ export const findStorageCardsByName = async(req: Request, res: Response) =>{
         return validateResult
     }
 
-    const cardname = req.params.id || ''
+    const cardname = req.params.name || ''
     if(typeof cardname !== "string" || cardname == ''){
         console.log("couldn't get cardname param value")
         return res.status(400).send("couldn't get cardname param value")
