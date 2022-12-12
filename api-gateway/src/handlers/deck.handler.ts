@@ -90,7 +90,7 @@ export const getDeck = async(req: Request, res: Response) =>{
             cardid: c.cardid,
             cardName: c.cardName,
             colorIdentity: c.colorIdentity,
-            imglink: card.imglink,
+            imglink: JSON.parse(JSON.stringify(card))[0].imglink,
             amount: c.amount,
             reservedStorageAmount: c.reservedStorageAmount,
             storageAmount: c.storageAmount
@@ -172,8 +172,8 @@ export const createDeck = async(req: Request, res: Response) =>{
         return res.status(404).send("card not found")
 
     const input: DeckInput = {
-        cardName: card.cardname,
-        colorIdentity: card.coloridentity,
+        cardName: JSON.parse(JSON.stringify(card))[0].cardname,
+        colorIdentity: JSON.parse(JSON.stringify(card))[0].coloridentity,
         commanderCardId: deckInfo.commanderCardId,
         deckName: deckInfo.deckName
     }
@@ -187,7 +187,10 @@ export const createDeck = async(req: Request, res: Response) =>{
             commanderCardId: input.commanderCardId,
             cardName: input.cardName,
             colorIdentity: input.colorIdentity
-        })
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 
     if(!result.ok && result.status != 200){
@@ -231,8 +234,8 @@ export const updateDeck = async(req: Request, res: Response) =>{
         return res.status(404).send("card not found")
         
     const input: DeckInput = {
-        cardName: card.cardname,
-        colorIdentity: card.coloridentity,
+        cardName: JSON.parse(JSON.stringify(card))[0].cardname,
+        colorIdentity: JSON.parse(JSON.stringify(card))[0].coloridentity,
         commanderCardId: deckInfo.commanderCardId,
         deckName: deckInfo.deckName
     }
@@ -246,7 +249,10 @@ export const updateDeck = async(req: Request, res: Response) =>{
             commanderCardId: input.commanderCardId,
             cardName: input.cardName,
             colorIdentity: input.colorIdentity
-        })
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 
     if(!result.ok && result.status != 200){
@@ -291,15 +297,18 @@ export const addCardToDeck = async(req: Request, res: Response) =>{
         return res.status(404).send("card not found")
 
     const input:DeckCardInput = {
-        cardId: card.id,
-        cardName: card.cardname,
-        coloridentity: card.coloridentity
+        cardId: JSON.parse(JSON.stringify(card))[0].id,
+        cardName: JSON.parse(JSON.stringify(card))[0].cardname,
+        coloridentity: JSON.parse(JSON.stringify(card))[0].coloridentity
     }
 
     const url = (process.env.STORAGE_SERVICE || 'http://localhost:9352') + 'api/decks/' + deckId
     const result = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(input)
+        body: JSON.stringify(input),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 
     if(!result.ok && result.status != 200){

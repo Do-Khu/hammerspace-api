@@ -28,7 +28,6 @@ export const getMyStorage = async(req: Request, res: Response) =>{
         method: 'GET'
     })
 
-    console.log(result)
     if(!result.ok && result.status != 200){
         return res.status(result.status).send()
     }
@@ -47,7 +46,7 @@ export const getMyStorage = async(req: Request, res: Response) =>{
             cardId: c.cardid,
             cardName: c.cardname,
             colorIdentity: c.coloridentity,
-            imgLink: card.imglink,
+            imgLink: JSON.parse(JSON.stringify(card))[0].imglink,
             deckId: c.deckid,
             isReserved: c.isreserved
         })
@@ -188,21 +187,26 @@ export const addCardToStorage = async(req: Request, res: Response) =>{
     }
     
     const userId = JSON.parse(JSON.stringify(currentUser))[0].id
-    console.log(userId)
+
     const card = await cardUtil.fetchCardInfo(cardInfo.cardId)
     if(!card)
         return res.status(404).send("card not found")
 
+    console.log(card)
     const input: StorageCardInput = {
         cardId: cardInfo.cardId,
-        cardname: card.cardname,
-        coloridentity: card.coloridentity
+        cardname: JSON.parse(JSON.stringify(card))[0].cardname,
+        coloridentity: JSON.parse(JSON.stringify(card))[0].coloridentity
     }
+    console.log(input)
 
     const url = (process.env.STORAGE_SERVICE || 'http://localhost:9252') + 'api/storage/' + userId
     const result = await fetch(url, {
         method: 'POST',
-        body: JSON.stringify(input)
+        body: JSON.stringify(input),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
 
     if(!result.ok && result.status != 200){
