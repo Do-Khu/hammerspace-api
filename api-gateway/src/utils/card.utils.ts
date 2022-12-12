@@ -15,5 +15,6 @@ export class CardUtil{
         }
     
         const card = (await cardResult.json()) as CardDto
+        return card;
     }
 }
